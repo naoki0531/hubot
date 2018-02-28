@@ -1,0 +1,10 @@
+{
+  "name": "hubot",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "@types/hubot": "^2.19.0",
+    "@types/node": "^9.4.6",
+    "typescript": "^2.7.2"
+  }
+}
