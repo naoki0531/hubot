@@ -11,11 +11,11 @@ module.exports = (robot: hubot.Robot): void => {
         const today: Date = new Date();
         const ymd: string = String(today.getFullYear()) + ('00' + (today.getMonth() + 1)).slice(-2) + ('00' + today.getDate()).slice(-2);
         const birthdayList: Array<birthday> = JSON.parse(fs.readFileSync('data/birthday.json', 'utf8'));
-        for (const key in birthdayList) {
-            if (ymd === birthdayList[key].date) {
-                msg.reply(`本日は${birthdayList[key].name}さんの誕生日です！`);
-                break;
+        birthdayList.forEach((birthday: birthday) => {
+            if (ymd === birthday.date) {
+                msg.reply(`本日は${birthday.name}さんの誕生日です！`);
+                return;
             }
-        }
+        });
     });
 };
