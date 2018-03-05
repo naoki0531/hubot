@@ -2,7 +2,6 @@
   "name": "nbs-bot",
   "version": "0.0.0",
   "private": true,
-  "author": "naoki <andvari100@gmail.com>",
   "description": "A simple helpful robot for your Company",
   "dependencies": {
     "hubot": "^2.19.0",
