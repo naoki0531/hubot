@@ -8,9 +8,6 @@ interface birthday {
 
 module.exports = (robot: hubot.Robot): void => {
     robot.respond(/誕生日( *)(.*)/i, (msg: hubot.Response) => {
-
-        msg.reply(msg.match[2]);
-
         let compareDate = '';
         let dateMessage = '本日';
         if (msg.match[2] !== '') {
