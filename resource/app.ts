@@ -1,5 +1,7 @@
 import * as hubot from 'hubot';
+// import * as hubot from 'hubot-slack';
 import * as fs from 'fs';
+import {CronJob} from 'cron';
 
 interface birthday {
     name: string,
@@ -7,6 +9,10 @@ interface birthday {
 }
 
 module.exports = (robot: hubot.Robot): void => {
+    new CronJob('0 30 17 * * 1-5', () => {
+        robot.send({room: "nbs_random"}, "定時ですよ〜");
+    }).start();
+
     robot.respond(/誕生日( *)(.*)/i, (msg: hubot.Response) => {
         let compareDate = '';
         let dateMessage = '本日';

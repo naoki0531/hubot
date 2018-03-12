@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/hubot": "^2.19.0",
     "@types/node": "^9.4.6",
+    "cron": "^1.3.0",
     "fs": "0.0.1-security",
     "typescript": "^2.7.2"
   }
