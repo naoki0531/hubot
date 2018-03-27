@@ -11,7 +11,7 @@ module.exports = (robot: hubot.Robot): void => {
         }
     }).start();
 
-    robot.respond(/誕生日( *)(.*)/i, (msg: hubot.Response) => {
+    robot.respond(/誕生日( +)(.*)/i, (msg: hubot.Response) => {
         let date = '';
         if (msg.match[2] !== '') {
             date = msg.match[2];
@@ -20,15 +20,16 @@ module.exports = (robot: hubot.Robot): void => {
         const birthdayMessage = createBirthdayMemberMessage(date);
         const dateMessage = date === '' ? '本日' : date;
 
-        msg.reply(birthdayMessage === '' ? `${dateMessage}が誕生日の方はいません。` : `${dateMessage}は ${birthdayMessage}の誕生日です！:cake:`);
+        msg.send(birthdayMessage === '' ? `${dateMessage}が誕生日の方はいません。` : `${dateMessage}は ${birthdayMessage}の誕生日です！:cake:`);
     });
 
     robot.respond(/誕生日登録 (.+) (.+)/, (msg: hubot.Response) => {
-        msg.reply('登録完了しました！');
+        BirthDay.register({date: msg.match[1], name: msg.match[2]});
+        msg.send('登録完了しました！');
     });
 
     robot.respond(/機能/, (msg: hubot.Response) => {
-        msg.reply('** 自動実行 **\n' +
+        msg.send('** 自動実行 **\n' +
             '10:00 誕生日お知らせ\n' +
             '\n ** コマンドリスト **\n' +
             '誕生日登録 {日付} {名前} : 例）誕生日 登録 0301 nbs-bot\n' +
