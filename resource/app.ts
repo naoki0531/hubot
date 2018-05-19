@@ -2,6 +2,9 @@ import * as hubot from 'hubot';
 import {birthday} from './birthdayInterface';
 import BirthDay from './birthday';
 import {CronJob} from 'cron';
+import Axios from 'axios';
+
+const Config = require('config');
 
 module.exports = (robot: hubot.Robot): void => {
     new CronJob('0 0 10 * * *', () => {
@@ -9,6 +12,8 @@ module.exports = (robot: hubot.Robot): void => {
         if (birthdayMessage !== '') {
             robot.send({room: "nbs_random"}, `本日は ${birthdayMessage}の誕生日です！お祝いしましょう！:cake:`);
         }
+
+        notificationExpiredTask();
     }).start();
 
     robot.respond(/誕生日( +)(\d{4})/i, (msg: hubot.Response) => {
@@ -19,7 +24,6 @@ module.exports = (robot: hubot.Robot): void => {
 
         const birthdayMessage = createBirthdayMemberMessage(date);
         const dateMessage = date === '' ? '本日' : date;
-
         msg.send(birthdayMessage === '' ? `${dateMessage}が誕生日の方はいません。` : `${dateMessage}は ${birthdayMessage}の誕生日です！:cake:`);
     });
 
@@ -37,6 +41,10 @@ module.exports = (robot: hubot.Robot): void => {
         );
     });
 
+    robot.respond(/期限切れタスク/, (msg: hubot.Response) => {
+        notificationExpiredTask();
+    });
+
     function createBirthdayMemberMessage(date: string = '') {
         const birthdayMember: Array<birthday> = BirthDay.fetchCelebrated(date);
         if (birthdayMember.length === 0) {
@@ -48,5 +56,9 @@ module.exports = (robot: hubot.Robot): void => {
             nameString += birthday.name + 'さん ';
         });
         return nameString;
+    }
+
+    function notificationExpiredTask() {
+        Axios.get(Config.expiredTasks);
     }
 };
