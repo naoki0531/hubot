@@ -5,6 +5,7 @@ import {CronJob} from 'cron';
 import Axios from 'axios';
 
 const Config = require('config');
+require('date-utils');
 
 module.exports = (robot: hubot.Robot): void => {
     new CronJob('0 0 10 * * *', () => {
@@ -41,8 +42,8 @@ module.exports = (robot: hubot.Robot): void => {
         );
     });
 
-    robot.respond(/期限切れタスク/, (msg: hubot.Response) => {
-        notificationExpiredTask();
+    robot.respond(/期限切れタスク( ?)(\d?)/, (msg: hubot.Response) => {
+        notificationExpiredTask(msg.match[2] !== '' ? parseInt(msg.match[2]) : 0);
     });
 
     function createBirthdayMemberMessage(date: string = '') {
@@ -58,9 +59,9 @@ module.exports = (robot: hubot.Robot): void => {
         return nameString;
     }
 
-    function notificationExpiredTask() {
-        Axios.get(Config.expiredTasks).then((data) => {
-            Axios.post(Config.expiredTasksLambda, data.data);
+    function notificationExpiredTask(addDate: number = 0) {
+        Axios.get(Config.expiredTasks + '&dueDateUntil=' + new Date().toFormat('YYYY-MM-DD')).then((data) => {
+            Axios.post(Config.expiredTasksLambda, {data: data.data, addDate: addDate});
         });
     }
 };
