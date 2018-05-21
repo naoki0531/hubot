@@ -59,6 +59,8 @@ module.exports = (robot: hubot.Robot): void => {
     }
 
     function notificationExpiredTask() {
-        Axios.get(Config.expiredTasks);
+        Axios.get(Config.expiredTasks, (data) => {
+            Axios.post(Config.expiredTasksLambda, data);
+        });
     }
 };
