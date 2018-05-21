@@ -60,8 +60,11 @@ module.exports = (robot: hubot.Robot): void => {
     }
 
     function notificationExpiredTask(addDate: number = 0) {
-        Axios.get(Config.expiredTasks + '&dueDateUntil=' + new Date().toFormat('YYYY-MM-DD')).then((data) => {
-            Axios.post(Config.expiredTasksLambda, {data: data.data, addDate: addDate});
+        const date = new Date();
+        date.setDate(date.getDate() - 1　+ addDate);
+
+        Axios.get(Config.expiredTasks + '&dueDateUntil=' + date.toFormat('YYYY-MM-DD')).then((data) => {
+            Axios.post(Config.expiredTasksLambda, data.data);
         });
     }
 };
