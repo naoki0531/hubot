@@ -11,10 +11,14 @@ module.exports = (robot: hubot.Robot): void => {
     new CronJob('0 0 10 * * *', () => {
         const birthdayMessage = createBirthdayMemberMessage();
         if (birthdayMessage !== '') {
-            robot.send({room: "nbs_random"}, `本日は ${birthdayMessage}の誕生日です！お祝いしましょう！:cake:`);
+            robot.send({room: "nbs_random_2018"}, `本日は ${birthdayMessage}の誕生日です！お祝いしましょう！:cake:`);
         }
 
         notificationExpiredTask();
+    }).start();
+    
+    new CronJob('0 0 17 * * *', () => {
+        notificationExpiredTask(1);
     }).start();
 
     robot.respond(/誕生日( +)(\d{4})/i, (msg: hubot.Response) => {
