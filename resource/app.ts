@@ -65,7 +65,7 @@ module.exports = (robot: hubot.Robot): void => {
 
     function notificationExpiredTask(addDate: number = 0) {
         const date = new Date();
-        const url = Config.expiredTasks + '&dueDateUntil=';
+        let url = Config.expiredTasks + '&dueDateUntil=';
 
         if (addDate !== 0) {
             date.setDate(date.getDate() - 1 + addDate);
