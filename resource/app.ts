@@ -16,7 +16,7 @@ module.exports = (robot: hubot.Robot): void => {
 
         notificationExpiredTask();
     }).start();
-    
+
     new CronJob('0 0 17 * * *', () => {
         notificationExpiredTask(1);
     }).start();
@@ -65,9 +65,17 @@ module.exports = (robot: hubot.Robot): void => {
 
     function notificationExpiredTask(addDate: number = 0) {
         const date = new Date();
-        date.setDate(date.getDate() - 1　+ addDate);
+        const url = Config.expiredTasks + '&dueDateUntil=';
 
-        Axios.get(Config.expiredTasks + '&dueDateUntil=' + date.toFormat('YYYY-MM-DD')).then((data) => {
+        if (addDate !== 0) {
+            date.setDate(date.getDate() - 1 + addDate);
+            url += date.toFormat('YYYY-MM-DD') + '&dueDateSince=' + date.toFormat('YYYY-MM-DD');
+        } else {
+            date.setDate(date.getDate() - 1);
+            url += date.toFormat('YYYY-MM-DD');
+        }
+
+        Axios.get(url).then((data) => {
             Axios.post(Config.expiredTasksLambda, data.data);
         });
     }
