@@ -76,7 +76,7 @@ module.exports = (robot: hubot.Robot): void => {
         }
 
         Axios.get(url).then((data) => {
-            Axios.post(Config.expiredTasksLambda, data.data);
+            Axios.post(Config.expiredTasksLambda, {data: data.data, expired: addDate});
         });
     }
 };
